@@ -10,7 +10,7 @@ This project is an extension of the python package [*construct*](https://pypi.or
 - **construct_typed**: Adding additional classes that help with autocompletion and additional type hints.
 
 ## Installation
-This package comply to [PEP 561](https://www.python.org/dev/peps/pep-0561/). So most of the static code analysers will recognise the stubs automatically. The installation only requires:
+This package complies to [PEP 561](https://www.python.org/dev/peps/pep-0561/). So most of the static code analysers will recognise the stubs automatically. The installation only requires:
 ```
 pip install construct-typing
 ```
@@ -21,8 +21,17 @@ The stubs are tested against the pytests of the *construct* package in a slightl
 The new typed constructs have new written pytests, which also passes all pytests and the static type checkers.
 
 The following static type checkers are fully supported:
-- mypy
+- ruff
+- ty
 - pyright
+
+## Running Type Checks Locally
+
+Type checks are run via [poethepoet](https://github.com/nat-n/poethepoet) and include [ruff](https://docs.astral.sh/ruff/), [ty](https://github.com/astral-sh/ty), and [pyright](https://github.com/microsoft/pyright):
+
+```bash
+uv run poe typecheck
+```
 
 ## Explanation
 ### Stubs
@@ -108,5 +117,3 @@ Image:
         12
         13
 ```
-
-
