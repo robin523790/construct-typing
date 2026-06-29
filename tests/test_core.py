@@ -537,6 +537,12 @@ def test_computed() -> None:
     assert raises(Computed(this.missing).parse, b"") == KeyError
     assert raises(Computed(this["missing"]).parse, b"") == KeyError
 
+def test_computed_lambda() -> None:
+    """Lambdas in a `Computed` are working and check that `ty` dont throw an `invalid-argument-type` error."""
+    c_lambda: "Computed[int]" = Computed(lambda ctx: 50)
+    assert c_lambda.build(None) == b""
+    assert c_lambda.parse(b"") == 50
+
 def test_index() -> None:
     d1 = Array(3, Bytes(this._index+1))
     common(d1, b"abbccc", [b"a", b"bb", b"ccc"])
