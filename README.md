@@ -18,14 +18,14 @@ pip install construct-typing
 ## Tests
 The stubs are tested against the pytests of the *construct* package in a slightly modified form. Since the tests are relatively detailed I think most cases are covered.
 
-The new typed constructs have new written pytests, which also passes all pytests and the static type checkers.
+The new typed constructs have new written pytests, which also passes all pytests and the static code analyzers.
 
-The following static type checkers are fully supported:
+The following static code analyzers are fully supported:
 - ruff
 - ty
 - pyright
 
-## Running Type Checks Locally
+## Running Static Code Analysis Locally
 
 Type checks are run via [poethepoet](https://github.com/nat-n/poethepoet) and include [ruff](https://docs.astral.sh/ruff/), [ty](https://github.com/astral-sh/ty), and [pyright](https://github.com/microsoft/pyright):
 
