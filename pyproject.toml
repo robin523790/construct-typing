@@ -65,6 +65,7 @@ dev = [
     "ruff>=0.15.21",
     "ty>=0.0.59",
     "setuptools>=83.0.0",
+    "mypy>=2.3.0",
     "cloudpickle",  # optional "extra" from construct that the user may or may not have installed
     "cryptography",  # optional "extra" from construct that the user may or may not have installed
     "lz4",  # optional "extra" from construct that the user may or may not have installed
@@ -82,6 +83,14 @@ packages=[
     "construct-stubs.lib",
     "construct_typed"
 ]
+
+[tool.uv]
+# mypy will only find the stubs from "construct-stubs" when using "compat" mode during development.
+config-settings = { editable_mode = "compat" }
+
+[tool.mypy]
+strict = true
+warn_unused_ignores = false
 
 [tool.pyright]
 typeCheckingMode = "strict"
