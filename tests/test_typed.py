@@ -26,7 +26,7 @@ def test_dataclass_const_default() -> None:
     assert a.const_bytes == b"BMP"
     assert a.const_int == 5
     assert a.default_int == 28
-    assert a.default_lambda == None
+    assert a.default_lambda is None
 
 
 def test_dataclass_access() -> None:
@@ -51,7 +51,7 @@ def test_dataclass_access() -> None:
     assert tcontainer["a"] == 6
 
     # wrong creation
-    assert raises(lambda: TestTContainer(a=0, b=1)) == TypeError
+    assert raises(lambda: TestTContainer(a=0, b=1)) is TypeError
 
 
 def test_dataclass_str_repr() -> None:
@@ -83,8 +83,8 @@ def test_dataclass_ifthenelse() -> None:
         )
 
     a = IfThenElseTest(test_if=None, test_ifthenelse=None)
-    assert a.test_if == None
-    assert a.test_ifthenelse == None
+    assert a.test_if is None
+    assert a.test_ifthenelse is None
 
 
 def test_dataclass_struct() -> None:
@@ -287,7 +287,7 @@ def test_dataclass_struct_no_dataclass() -> None:
         a: int = csfield(cs.Int16ub)
         b: int = csfield(cs.Int8ub)
 
-    assert raises(lambda: DataclassStruct(TestContainer)) == TypeError
+    assert raises(lambda: DataclassStruct(TestContainer)) is TypeError
 
 
 def test_dataclass_struct_no_DataclassMixin() -> None:
@@ -297,7 +297,7 @@ def test_dataclass_struct_no_DataclassMixin() -> None:
         b: int = csfield(cs.Int8ub)
 
     cls = t.cast(t.Type[DataclassMixin], TestContainer)
-    assert raises(lambda: DataclassStruct(cls)) == TypeError
+    assert raises(lambda: DataclassStruct(cls)) is TypeError
 
 
 def test_dataclass_struct_wrong_container() -> None:
@@ -311,10 +311,7 @@ def test_dataclass_struct_wrong_container() -> None:
         a: int = csfield(cs.Int16ub)
         b: int = csfield(cs.Int8ub)
 
-    assert (
-        raises(DataclassStruct(TestContainer1).build, TestContainer2(a=1, b=2))
-        == TypeError
-    )
+    assert raises(DataclassStruct(TestContainer1).build, TestContainer2(a=1, b=2)) is TypeError
 
 
 def test_dataclass_struct_doc() -> None:
@@ -386,7 +383,7 @@ def test_tenum() -> None:
     assert d.parse(b"\xff") == TestEnum(255)
     assert d.parse(b"\xff") == 255
     assert int(d.parse(b"\xff")) == 255
-    assert raises(d.build, 8) == TypeError
+    assert raises(d.build, 8) is TypeError
 
 
 def test_tenum_no_enumbase() -> None:
@@ -395,7 +392,7 @@ def test_tenum_no_enumbase() -> None:
         b = 2
 
     cls = t.cast(t.Type[cst.EnumBase], E)
-    assert raises(lambda: cst.TEnum(cs.Byte, cls)) == TypeError
+    assert raises(lambda: cst.TEnum(cs.Byte, cls)) is TypeError
 
 
 def test_tenum_asdict() -> None:
@@ -470,7 +467,7 @@ def test_dataclass_struct_wrong_enumbase() -> None:
         a = 1
         b = 2
 
-    assert raises(cst.TEnum(cs.Byte, E1).build, E2.a) == TypeError
+    assert raises(cst.TEnum(cs.Byte, E1).build, E2.a) is TypeError
 
 
 def test_tenum_in_tstruct() -> None:
@@ -491,7 +488,7 @@ def test_tenum_in_tstruct() -> None:
     )
 
     assert (
-        raises(cst.TEnum(cs.Byte, TestEnum).build, TestContainer(a=1, b=2)) == TypeError  # type: ignore
+        raises(cst.TEnum(cs.Byte, TestEnum).build, TestContainer(a=1, b=2)) is TypeError  # type: ignore
     )
 
 
@@ -510,7 +507,7 @@ def test_tenum_flags() -> None:
     assert d.build(TestEnum(1 | 2)) == b"\x03"
     assert d.build(TestEnum(255)) == b"\xff"
     assert d.build(TestEnum.eight) == b"\x08"
-    assert raises(d.build, 2) == TypeError
+    assert raises(d.build, 2) is TypeError
 
 
 def test_tenum_flags_asdict() -> None:
