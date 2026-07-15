@@ -165,10 +165,40 @@ ignore = [
      "F405",  # `...` may be undefined, or defined from star imports
 ]
 
+[tool.poe.tasks.test]
+cmd = "pytest $POE_EXTRA_ARGS"
+executor = {type = "uv", isolated = true}
+
+[tool.poe.tasks.lint]
+cmd = "ruff check --fix --show-fixes"
+executor = { type = "uv", isolated = true }
+
+[tool.poe.tasks.lint-checkonly]
+cmd = "ruff check"
+executor = { type = "uv", isolated = true }
+
+[tool.poe.tasks.ty]
+cmd = "ty check"
+executor = {type = "uv", isolated = true}
+
+[tool.poe.tasks.pyright]
+cmd = "pyright"
+executor = {type = "uv", isolated = true}
+
+[tool.poe.tasks.mypy]
+cmd = "mypy tests construct_typed"
+executor = {type = "uv", isolated = true}
+
 [tool.poe.tasks.typecheck]
 sequence = [
-    { cmd = "ruff check --fix --show-fixes" },
-    { cmd = "ty check" },
-    { cmd = "pyright" },
+    "ty",
+    "pyright",
+    "mypy"
 ]
-executor = {type = "uv", isolated = true}
+
+[tool.poe.tasks.check-all]
+sequence = [
+    "lint",
+    "typecheck",
+    "test",
+]

@@ -30,11 +30,14 @@ jobs:
       - name: Install dependencies
         run: uv sync
 
+      - name: Run linter/code formatter
+        run: uv run poe lint-checkonly
+
       - name: Run type checks
         run: uv run poe typecheck
 
       - name: Run pytests
-        run: pytest tests/ --showlocals --verbose
+        run: uv run poe test --showlocals --verbose
 
   create_wheel_and_sdist:
     runs-on: ubuntu-latest

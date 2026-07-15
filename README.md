@@ -18,19 +18,43 @@ pip install construct-typing
 ## Tests
 The stubs are tested against the pytests of the *construct* package in a slightly modified form. Since the tests are relatively detailed I think most cases are covered.
 
-The new typed constructs have new written pytests, which also passes all pytests and the static code analyzers.
+The new typed constructs have new written pytests, which also passes all pytests and the static type checkers.
 
-The following static code analyzers are fully supported:
-- ruff
-- ty
-- pyright
+The following static type checkers are fully supported:
+- [mypy](https://github.com/python/mypy)
+- [pyright](https://github.com/microsoft/pyright)
+- [ty](https://github.com/astral-sh/ty) (experimental, since ty itself is still in development)
 
-## Running Static Code Analysis Locally
+## Development
 
-Type checks are run via [poethepoet](https://github.com/nat-n/poethepoet) and include [ruff](https://docs.astral.sh/ruff/), [ty](https://github.com/astral-sh/ty), and [pyright](https://github.com/microsoft/pyright):
+This project uses `uv` as an project management tool. To setup your development environment, run the following command:
+
+```bash
+uv sync
+```
+
+To run the unit tests, run:
+
+```bash
+uv run poe test
+```
+
+To run the linter/code formatter (including auto fix), run:
+
+```bash
+uv run poe lint
+```
+
+To run all supported type checkers, run:
 
 ```bash
 uv run poe typecheck
+```
+
+To run, unit tests, linter/code formatter and type checkers, run:
+
+```bash
+uv run poe check-all
 ```
 
 ## Explanation
