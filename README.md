@@ -10,7 +10,7 @@ This project is an extension of the python package [*construct*](https://pypi.or
 - **construct_typed**: Adding additional classes that help with autocompletion and additional type hints.
 
 ## Installation
-This package comply to [PEP 561](https://www.python.org/dev/peps/pep-0561/). So most of the static code analysers will recognise the stubs automatically. The installation only requires:
+This package complies with [PEP 561](https://www.python.org/dev/peps/pep-0561/). So most of the static code analysers will recognise the stubs automatically. The installation only requires:
 ```
 pip install construct-typing
 ```
@@ -21,8 +21,41 @@ The stubs are tested against the pytests of the *construct* package in a slightl
 The new typed constructs have new written pytests, which also passes all pytests and the static type checkers.
 
 The following static type checkers are fully supported:
-- mypy
-- pyright
+- [mypy](https://github.com/python/mypy)
+- [pyright](https://github.com/microsoft/pyright)
+- [ty](https://github.com/astral-sh/ty) (experimental, since ty itself is still in development)
+
+## Development
+
+This project uses `uv` as a project management tool. To set up your development environment, run the following command:
+
+```bash
+uv sync
+```
+
+To run the unit tests, run:
+
+```bash
+uv run poe test
+```
+
+To run the linter/code formatter (including auto fix), run:
+
+```bash
+uv run poe lint
+```
+
+To run all supported type checkers, run:
+
+```bash
+uv run poe typecheck
+```
+
+To run unit tests, linter/code formatter and type checkers, run:
+
+```bash
+uv run poe check-all
+```
 
 ## Explanation
 ### Stubs
@@ -108,5 +141,3 @@ Image:
         12
         13
 ```
-
-

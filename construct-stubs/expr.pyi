@@ -29,6 +29,7 @@ class ExprMixin(t.Generic[ReturnType], object):
     @t.overload
     def __add__(self: ExprMixin[float], other: ConstOrCallable[float]) -> BinExpr[float]: ...
     @t.overload
+    def __add__(self, other: t.Any) -> BinExpr[t.Any]: ...
 
     # __sub__ ##########################################################################################################
     @t.overload

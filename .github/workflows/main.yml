@@ -1,10 +1,13 @@
 name: CI
 
-on: 
+on:
   push:
   pull_request:
   workflow_dispatch:
   workflow_call:
+
+env:
+  PY_COLORS: "1"
 
 jobs:
   build:
@@ -12,84 +15,52 @@ jobs:
     strategy:
       matrix:
         os: ['ubuntu-latest', 'windows-latest']
-        python-version: [ '3.9', '3.10', '3.11', '3.12', '3.13' ]
-        
+        python-version: [ '3.10', '3.11', '3.12', '3.13', '3.14' ]
+
     runs-on: ${{ matrix.os }}
     name: OS ${{ matrix.os }}, Python ${{ matrix.python-version }}
 
     steps:
-      # Checks out a copy of your repository on the machine
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7
 
-      # Setup python
-      - name: Setup python
-        uses: actions/setup-python@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v8.3.2
         with:
           python-version: ${{ matrix.python-version }}
-          architecture: x64
 
-      # Setup node.js (for pyright)
-      - name: Setup node.js (for pyright)
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-        
-      # Install pyright
-      - name: Install pyright
-        run: |
-          npm install -g pyright
-          pyright --version
+      - name: Install dependencies
+        run: uv sync
 
-      # Install this package
-      - name: Install this package  
-        run: |
-          python -m pip install .
+      - name: Run linter/code formatter
+        run: uv run poe lint-checkonly
 
-      # Install dependencies
-      - name: Install dependencies  
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install -r requirements.txt
+      - name: Run type checks
+        run: uv run poe typecheck
 
-      # Run pytests
       - name: Run pytests
-        run: |
-          pytest tests/ --showlocals --verbose
-          
-      # Run mypy
-      - name: Run mypy
-        run: |
-          mypy tests construct_typed
-
-      # Run pyright
-      - name: Run pyright
-        run: |
-          pyright
+        run: uv run poe test --showlocals --verbose
 
   create_wheel_and_sdist:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v7
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.13'
-        architecture: x64
+      - name: Install uv
+        uses: astral-sh/setup-uv@v8.3.2
+        with:
+          python-version: '3.13'
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install wheel build
+      - name: Install dependencies
+        run: uv sync
 
-    - name: Build wheel and sdist
-      run: |
-        python -m build
+      - name: Build wheel and sdist
+        run: uv build
 
-    - name: Upload wheel and sdist as artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: Package-Distributions-construct-typing
-        path: dist/
+      - name: Upload wheel and sdist as artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: Package-Distributions-construct-typing
+          path: dist/
