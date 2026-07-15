@@ -10,7 +10,7 @@ This project is an extension of the python package [*construct*](https://pypi.or
 - **construct_typed**: Adding additional classes that help with autocompletion and additional type hints.
 
 ## Installation
-This package complies to [PEP 561](https://www.python.org/dev/peps/pep-0561/). So most of the static code analysers will recognise the stubs automatically. The installation only requires:
+This package complies with [PEP 561](https://www.python.org/dev/peps/pep-0561/). So most of the static code analysers will recognise the stubs automatically. The installation only requires:
 ```
 pip install construct-typing
 ```
@@ -27,7 +27,7 @@ The following static type checkers are fully supported:
 
 ## Development
 
-This project uses `uv` as an project management tool. To setup your development environment, run the following command:
+This project uses `uv` as a project management tool. To set up your development environment, run the following command:
 
 ```bash
 uv sync
@@ -51,7 +51,7 @@ To run all supported type checkers, run:
 uv run poe typecheck
 ```
 
-To run, unit tests, linter/code formatter and type checkers, run:
+To run unit tests, linter/code formatter and type checkers, run:
 
 ```bash
 uv run poe check-all
