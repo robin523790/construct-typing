@@ -1115,7 +1115,7 @@ class ProcessRotateLeft(
 
 T = t.TypeVar("T")
 
-class Checksum(t.Generic[T, ParsedType, BuildTypes], Construct[ParsedType, BuildTypes]):
+class Checksum(t.Generic[T, ParsedType, BuildTypes], Construct[ParsedType, t.Optional[BuildTypes]]):
     checksumfield: Construct[ParsedType, BuildTypes]
     hashfunc: t.Callable[[T], BuildTypes]
     bytesfunc: t.Callable[[Context], T]

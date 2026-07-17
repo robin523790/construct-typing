@@ -12,7 +12,7 @@
 - Added `csfield_default` to create dataclass fields that have a default value.
 - Added `csfield_noinit` to create dataclass fields that are excluded from constructor.
 - Optimize type stubs for `Computed`, `Default` and `Rebuild` in conjunction with `ty`.
-
+- Optimize type stubs for `Checksum`, to represent that it can build from `None`.
 
 ** Organizational changes: **
 - Use `uv` as a project management tool and `poe` as a task runner.

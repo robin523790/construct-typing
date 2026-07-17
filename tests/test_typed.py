@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import dataclasses
 import enum
+import hashlib
 import textwrap
 import typing as t
 
@@ -306,6 +307,27 @@ def test_dataclass_struct_rebuild_field() -> None:
         b"\x02\x03\x06",
         setattrs(Image(2, 3), size=6),
         3,
+    )
+
+
+def test_dataclass_struct_checksum_field() -> None:
+    @dataclasses.dataclass
+    class Image(DataclassMixin):
+        width: int = csfield(cs.Int8ub)
+        height: int = csfield(cs.Int8ub)
+        checksum: bytes | None = csfield_noinit(
+            cs.Checksum(
+                cs.Bytes(4),
+                lambda data: hashlib.sha256(data).digest()[:4],
+                lambda ctx: bytes([ctx.width, ctx.height]),
+            )
+        )
+
+    common(
+        DataclassStruct(Image),
+        b"\x02\x03\xee\x90\x40\xf6",
+        setattrs(Image(2, 3), checksum=b"\xee\x90\x40\xf6"),
+        6,
     )
 
 
