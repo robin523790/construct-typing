@@ -91,6 +91,11 @@ config-settings = { editable_mode = "compat" }
 [tool.mypy]
 strict = true
 warn_unused_ignores = false
+# This file is specifically designed to test that Pyright emits errors for invalid dataclass calls
+# (via `# pyright: ignore[reportCallIssue]`). Mypy doesn't understand pyright's ignore comments, so
+# it reports these intentionally-invalid calls as real errors. Exclude it from mypy checking.
+exclude = ["tests/test_typed_pyright.py"]
+
 
 [tool.pyright]
 typeCheckingMode = "strict"

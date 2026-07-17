@@ -101,7 +101,7 @@ A short example:
 import dataclasses
 import typing as t
 from construct import Array, Byte, Const, Int8ub, this
-from construct_typed import DataclassMixin, DataclassStruct, EnumBase, TEnum, csfield
+from construct_typed import DataclassMixin, DataclassStruct, EnumBase, TEnum, csfield, csfield_const
 
 class Orientation(EnumBase):
     HORIZONTAL = 0
@@ -109,7 +109,7 @@ class Orientation(EnumBase):
 
 @dataclasses.dataclass
 class Image(DataclassMixin):
-    signature: bytes = csfield(Const(b"BMP"))
+    signature: bytes = csfield_const(Bytes(3), b"BMP")
     orientation: Orientation = csfield(TEnum(Int8ub, Orientation))
     width: int = csfield(Int8ub)
     height: int = csfield(Int8ub)
@@ -141,3 +141,91 @@ Image:
         12
         13
 ```
+
+#### Using constants in DataclassStruct
+If you want a simple, fixed constant in a `DataclassStruct`, use `csfield_const`. It automatically wraps the given value in a `cs.Const` construct and sets the value directly, without a constructor parameter, when the `DataclassStruct` instance is created.
+
+```python
+import dataclasses
+from construct import Const, Int8ub, Bytes
+from construct_typed import DataclassMixin, csfield, csfield_const
+import inspect
+
+
+@dataclasses.dataclass
+class Image(DataclassMixin):
+    signature: bytes = csfield_const(Bytes(3), b"BMP")  # <-- no constructor parameter is generated
+    width: int = csfield(Int8ub)
+    height: int = csfield(Int8ub)
+
+
+print(inspect.signature(Image))  # -> (width: int, height: int) -> None
+```
+
+#### Using defaults in DataclassStruct
+If you want a simple, fixed default value for a parameter in a `DataclassStruct`, use `csfield_default`. It automatically wraps the given value in a `cs.Default` construct and sets it as the field's default value. This default value can still be overridden through the `DataclassStruct` constructor. As a consequence, all fields that follow it in the constructor must be marked as `kw_only`.
+
+```python
+import dataclasses
+from construct import Int8ub, Bytes
+from construct_typed import DataclassMixin, csfield, csfield_default
+import inspect
+
+
+@dataclasses.dataclass
+class Image(DataclassMixin):
+    some_value: int = csfield(Int8ub)
+    signature: bytes = csfield_default(Bytes(3), default=b"BMP")  # <-- constructor parameter is generated with default value b"BMP"
+    width: int = csfield(Int8ub, kw_only=True)  # <-- kw_only is required for all fields after a default field
+    height: int = csfield(Int8ub, kw_only=True)  # <-- kw_only is required for all fields after a default field
+
+
+print(inspect.signature(Image))  # -> (some_value: int, signature: bytes = b'BMP', *, width: int, height: int) -> None
+```
+
+For more complex cases, where the default value needs to be computed dynamically from the context, use `csfield_noinit(Default(...))` instead, since the context is not yet known when the `DataclassStruct` instance is created. For example:
+
+```python
+import dataclasses
+from construct import Int8ub, Int16ub, Default, this
+from construct_typed import DataclassMixin, csfield, csfield_noinit
+import inspect
+
+
+@dataclasses.dataclass
+class Image(DataclassMixin):
+    width: int = csfield(Int8ub)
+    height: int = csfield(Int8ub)
+    min_buffer_size: int | None = csfield_noinit(  # <-- "| None" is required
+        Default(Int16ub, this.width * this.height)
+    )
+
+print(inspect.signature(Image))  # -> (width: int, height: int) -> None
+```
+
+
+
+#### Using generic constructs that build from `None`
+Some constructs, such as `cs.Computed`, `cs.Rebuild`, `cs.Padding`, `cs.Tell`, `cs.Pass` and `cs.Terminated`, are only computed dynamically at parse/build time. Fields for these constructs must be declared with `csfield_noinit`, because their values are not yet known when a `DataclassStruct` instance is created through the constructor, and are therefore automatically initialized to `None`. As a result, these fields cannot be overridden through the constructor. Because the constructor always sets them to `None`, their type must always be `<type> | None`.
+
+```python
+import dataclasses
+from construct import Int8ub, Computed
+from construct.core import Tell
+from construct_typed import DataclassMixin, csfield, csfield_noinit
+import inspect
+
+
+@dataclasses.dataclass
+class Image(DataclassMixin):
+    width: int = csfield(Int8ub)
+    height: int = csfield(Int8ub)
+    pos: int | None = csfield_noinit(Tell)  # <-- "| None" is required
+    size: int | None = csfield_noinit(  # <-- "| None" is required
+        Computed(lambda ctx: ctx.width * ctx.height)
+    )
+
+print(inspect.signature(Image))  # -> (width: int, height: int) -> None
+```
+
+Note: `csfield_noinit` can technically also be used with `cs.Const` or a non-lambda `cs.Default`, but the field then stays `None` until the struct is parsed, since the value is not assigned by the constructor. If the value should already be available right after construction, use `csfield_const()` or `csfield_default()` instead.
