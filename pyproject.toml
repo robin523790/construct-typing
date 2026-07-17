@@ -144,14 +144,6 @@ output-format = "concise"  # "full" | "concise" | "grouped" | "json" | "junit" |
 [tool.ruff.lint]
 allowed-confusables = ["×", "–", "‘", "’"]
 
-# select = [] Use Default ruleset, cp. https://docs.astral.sh/ruff/rules/
-
-# These warnings should be activated as "error" in the future, but for now we don't want to refactor the entire codebase right now.
-ignore = [
-    "F403",  # `from ... import *` used; unable to detect undefined names
-    "F405",  # `...` may be undefined, or defined from star imports
-]
-
 [tool.poe.tasks.test]
 cmd = "pytest $POE_EXTRA_ARGS"
 executor = {type = "uv", isolated = true}

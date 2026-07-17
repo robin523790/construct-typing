@@ -1,18 +1,186 @@
 # -*- coding: utf-8 -*-
 # mypy: no-warn-unused-ignores
-from .declarativeunittest import raises, common, ident, devzero
-from construct.core import *
-from construct import *
-from construct.lib import *
-from construct.lib.containers import *
-import itertools
-import os
-import io
-import random
-import math
-import pytest
-import typing as t
 import hashlib
+import io
+import itertools
+import math
+import os
+import random
+import typing as t
+
+import pytest
+from construct import (
+    Adapter,
+    Aligned,
+    AlignedStruct,
+    Array,
+    Bit,
+    BitsInteger,
+    BitsSwapped,
+    BitStruct,
+    Bitwise,
+    Byte,
+    Bytes,
+    BytesInteger,
+    ByteSwapped,
+    Bytewise,
+    Check,
+    CheckError,
+    Checksum,
+    ChecksumError,
+    CipherError,
+    Compressed,
+    CompressedLZ4,
+    Computed,
+    Const,
+    ConstError,
+    Construct,
+    Container,
+    CString,
+    Debugger,
+    Default,
+    Double,
+    EncryptedSym,
+    EncryptedSymAead,
+    Enum,
+    EnumIntegerString,
+    Error,
+    ExplicitError,
+    ExprAdapter,
+    ExprValidator,
+    Filter,
+    FixedSized,
+    Flag,
+    FlagsEnum,
+    Float32b,
+    FocusedSeq,
+    FormatField,
+    FormatFieldError,
+    FuncPath,
+    GreedyBytes,
+    GreedyRange,
+    GreedyString,
+    Half,
+    Hex,
+    HexDump,
+    If,
+    IfThenElse,
+    Index,
+    Indexing,
+    Int,
+    Int8sb,
+    Int8sl,
+    Int8ub,
+    Int8ul,
+    Int8un,
+    Int16sb,
+    Int16sl,
+    Int16ub,
+    Int16ul,
+    Int24sb,
+    Int24sl,
+    Int24ub,
+    Int24ul,
+    Int32sb,
+    Int32sl,
+    Int32ub,
+    Int32ul,
+    Int32un,
+    Int64sb,
+    Int64sl,
+    Int64ub,
+    Int64ul,
+    IntegerError,
+    Lazy,
+    LazyArray,
+    LazyBound,
+    LazyStruct,
+    ListContainer,
+    Long,
+    Mapping,
+    MappingError,
+    NamedTuple,
+    NamedTupleError,
+    Nibble,
+    NoneOf,
+    NullStripped,
+    NullTerminated,
+    Numpy,
+    Octet,
+    OffsettedEnd,
+    OneOf,
+    Optional,
+    Padded,
+    PaddedString,
+    Padding,
+    PaddingError,
+    PascalString,
+    Pass,
+    Peek,
+    Pickled,
+    Pointer,
+    Prefixed,
+    PrefixedArray,
+    Probe,
+    ProcessRotateLeft,
+    ProcessXor,
+    RangeError,
+    RawCopy,
+    Rebuffered,
+    Rebuild,
+    Renamed,
+    RepeatError,
+    RepeatUntil,
+    RestreamData,
+    Restreamed,
+    Seek,
+    Select,
+    SelectError,
+    Sequence,
+    Short,
+    Single,
+    SizeofError,
+    Slicing,
+    StopIf,
+    StreamError,
+    StringError,
+    Struct,
+    Switch,
+    SymmetricAdapter,
+    Tell,
+    Terminated,
+    TerminatedError,
+    Timestamp,
+    Transformed,
+    Union,
+    UnionError,
+    ValidationError,
+    VarInt,
+    ZigZag,
+    len_,
+    obj_,
+    stream_iseof,
+    stream_seek,
+    stream_size,
+    stream_tell,
+    this,
+)
+from construct.lib.binary import (
+    bits2bytes,
+    bytes2bits,
+)
+from construct.lib.py3compat import (
+    ONWINDOWS,
+    PYPY,
+    bytestringtype,
+    int2byte,
+    integertypes,
+)
+
+from .declarativeunittest import common, devzero, ident, raises
+
+if t.TYPE_CHECKING:
+    from construct.core import BuildTypes, Context, ParsedType
 
 
 def test_bytes() -> None:
@@ -846,8 +1014,9 @@ def test_numpy() -> None:
 
 @pytest.mark.xfail(reason="docs stated that it throws StreamError, not true at all")
 def test_numpy_error() -> None:
-    import numpy
     import io
+
+    import numpy
 
     numpy.load(io.BytesIO(b""))  # type: ignore
 
@@ -1613,6 +1782,7 @@ def test_checksum_warnings_issue_841() -> None:
                 bytesfunc: t.Callable[[Context], bytes],
             ) -> None: ...
     else:
+        import binascii
 
         class Checksum2(Construct):
             def __init__(self, checksumfield, hashfunc, bytesfunc):

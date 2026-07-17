@@ -1,6 +1,6 @@
 import typing as t
 
-from construct.core import *
+from construct.core import Context
 
 UniOperator = t.Callable[[t.Any], t.Any]
 BinOperator = t.Callable[[t.Any, t.Any], t.Any]

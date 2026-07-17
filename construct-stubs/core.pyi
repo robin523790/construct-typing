@@ -7,15 +7,17 @@ import typing as t
 import arrow
 from construct.lib import (
     Container,
-    ContainerType,
     HexDisplayedBytes,
     HexDisplayedDict,
     HexDisplayedInteger,
     HexDumpDisplayedBytes,
     HexDumpDisplayedDict,
     ListContainer,
-    ListType,
     RebufferedBytesIO,
+)
+from construct.lib.containers import (
+    ContainerType,
+    ListType,
 )
 from cryptography.hazmat.primitives.ciphers import Cipher
 from cryptography.hazmat.primitives.ciphers.aead import AESCCM, AESGCM, ChaCha20Poly1305

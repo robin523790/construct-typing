@@ -3,7 +3,7 @@ import typing as t
 
 from typing_extensions import Self
 
-from .generic_wrapper import *
+from .generic_wrapper import Adapter, Construct, Context, PathType
 
 
 # ## TEnum ############################################################################################################
@@ -91,6 +91,7 @@ class TEnum(Adapter[int, int, EnumType, EnumType]):
     """
     Typed enum.
     """
+
     def __init__(self, subcon: Construct[int, int], enum_type: t.Type[EnumType]):
         if not issubclass(enum_type, EnumBase):
             raise TypeError(
@@ -187,6 +188,7 @@ class TFlagsEnum(Adapter[int, int, FlagsEnumType, FlagsEnumType]):
     """
     Typed enum.
     """
+
     def __init__(self, subcon: Construct[int, int], enum_type: t.Type[FlagsEnumType]):
         if not issubclass(enum_type, FlagsEnumBase):
             raise TypeError(

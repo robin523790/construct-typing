@@ -11,12 +11,12 @@ ValueType = t.TypeVar("ValueType")
 if t.TYPE_CHECKING:
     # while type checking, the original classes are already generics, because they are defined like this in the stubs.
     from construct import Adapter as Adapter
-    from construct import ConstantOrContextLambda as ConstantOrContextLambda
-    from construct import Construct as Construct
-    from construct import Context as Context
-    from construct import ListContainer as ListContainer
-    from construct import PathType as PathType
     from construct import Array as Array
+    from construct import Construct as Construct
+    from construct import ListContainer as ListContainer
+    from construct.core import ConstantOrContextLambda as ConstantOrContextLambda
+    from construct.core import Context as Context
+    from construct.core import PathType as PathType
 
 
 else:

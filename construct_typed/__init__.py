@@ -12,12 +12,12 @@ from .dataclass_struct import (
 )
 from .generic_wrapper import (
     Adapter,
+    Array,
     ConstantOrContextLambda,
     Construct,
     Context,
     ListContainer,
     PathType,
-    Array
 )
 from .tenum import EnumBase, EnumValue, FlagsEnumBase, TEnum, TFlagsEnum
 
@@ -43,5 +43,5 @@ __all__ = [
     "Context",
     "ListContainer",
     "PathType",
-    "Array"
+    "Array",
 ]

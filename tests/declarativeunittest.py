@@ -5,17 +5,20 @@ import typing as t
 import pytest
 from construct import (
     Construct,
-    ListContainer,
     Container,
+    EnumInteger,
+    EnumIntegerString,
+    ListContainer,
+    SizeofError,
+)
+from construct.lib import (
     HexDisplayedBytes,
     HexDisplayedDict,
     HexDisplayedInteger,
     HexDumpDisplayedBytes,
     HexDumpDisplayedDict,
-    EnumInteger,
-    EnumIntegerString,
-    SizeofError,
 )
+
 import construct_typed as cst
 
 xfail = pytest.mark.xfail
