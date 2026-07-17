@@ -1834,7 +1834,8 @@ def test_checksum_warnings_issue_841() -> None:
             Bytes(64), lambda data: hashlib.sha512(data).digest(), this.fields.data
         ),
     )
-    d.parse(bytes(66))
+    with pytest.warns(ChecksumWarning):
+        d.parse(bytes(66))
 
 
 def test_compressed_zlib() -> None:
