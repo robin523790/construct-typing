@@ -5,17 +5,20 @@ import typing as t
 import pytest
 from construct import (
     Construct,
-    ListContainer,
     Container,
+    EnumInteger,
+    EnumIntegerString,
+    ListContainer,
+    SizeofError,
+)
+from construct.lib import (
     HexDisplayedBytes,
     HexDisplayedDict,
     HexDisplayedInteger,
     HexDumpDisplayedBytes,
     HexDumpDisplayedDict,
-    EnumInteger,
-    EnumIntegerString,
-    SizeofError,
 )
+
 import construct_typed as cst
 
 xfail = pytest.mark.xfail
@@ -49,7 +52,9 @@ def ident(x: IdentType) -> IdentType:
 devzero: t.BinaryIO = ZeroIO()  # type: ignore
 
 
-def raises(func: t.Callable[..., t.Any], *args: t.Any, **kw: t.Any) -> t.Union[t.Any, Exception]:
+def raises(
+    func: t.Callable[..., t.Any], *args: t.Any, **kw: t.Any
+) -> t.Union[t.Any, t.Type[Exception]]:
     try:
         return func(*args, **kw)
     except Exception as e:
