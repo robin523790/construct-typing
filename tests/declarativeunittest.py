@@ -54,7 +54,7 @@ devzero: t.BinaryIO = ZeroIO()  # type: ignore
 
 def raises(
     func: t.Callable[..., t.Any], *args: t.Any, **kw: t.Any
-) -> t.Union[t.Any, Exception]:
+) -> t.Union[t.Any, t.Type[Exception]]:
     try:
         return func(*args, **kw)
     except Exception as e:
