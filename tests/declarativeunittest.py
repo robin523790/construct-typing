@@ -3,9 +3,19 @@ import io
 import typing as t
 
 import pytest
-from construct import *
-from construct.lib import *
-
+from construct import (
+    Construct,
+    ListContainer,
+    Container,
+    HexDisplayedBytes,
+    HexDisplayedDict,
+    HexDisplayedInteger,
+    HexDumpDisplayedBytes,
+    HexDumpDisplayedDict,
+    EnumInteger,
+    EnumIntegerString,
+    SizeofError,
+)
 import construct_typed as cst
 
 xfail = pytest.mark.xfail
@@ -39,9 +49,7 @@ def ident(x: IdentType) -> IdentType:
 devzero: t.BinaryIO = ZeroIO()  # type: ignore
 
 
-def raises(
-    func: t.Callable[..., t.Any], *args: t.Any, **kw: t.Any
-) -> t.Union[t.Any, Exception]:
+def raises(func: t.Callable[..., t.Any], *args: t.Any, **kw: t.Any) -> t.Union[t.Any, Exception]:
     try:
         return func(*args, **kw)
     except Exception as e:
@@ -54,9 +62,8 @@ def common(
     datasample: Buffer,
     objsample: t.Union[ContainerType, t.Dict[str, t.Any]],
     sizesample: t.Union[int, t.Type[Exception]] = ...,
-    **kw: t.Any
-) -> None:
-    ...
+    **kw: t.Any,
+) -> None: ...
 
 
 @t.overload
@@ -65,9 +72,8 @@ def common(
     datasample: Buffer,
     objsample: t.List[ParsedType],
     sizesample: t.Union[int, t.Type[Exception]] = ...,
-    **kw: t.Any
-) -> None:
-    ...
+    **kw: t.Any,
+) -> None: ...
 
 
 @t.overload
@@ -76,9 +82,8 @@ def common(
     datasample: Buffer,
     objsample: t.Dict[str, t.Any],
     sizesample: t.Union[int, t.Type[Exception]] = ...,
-    **kw: t.Any
-) -> None:
-    ...
+    **kw: t.Any,
+) -> None: ...
 
 
 @t.overload
@@ -87,9 +92,8 @@ def common(
     datasample: Buffer,
     objsample: t.Union[int, str],
     sizesample: t.Union[int, t.Type[Exception]] = ...,
-    **kw: t.Any
-) -> None:
-    ...
+    **kw: t.Any,
+) -> None: ...
 
 
 @t.overload
@@ -98,9 +102,8 @@ def common(
     datasample: Buffer,
     objsample: t.Union[HexDisplayedInteger, int],
     sizesample: t.Union[int, t.Type[Exception]] = ...,
-    **kw: t.Any
-) -> None:
-    ...
+    **kw: t.Any,
+) -> None: ...
 
 
 @t.overload
@@ -109,9 +112,8 @@ def common(
     datasample: Buffer,
     objsample: t.Union[HexDisplayedBytes, bytes],
     sizesample: t.Union[int, t.Type[Exception]] = ...,
-    **kw: t.Any
-) -> None:
-    ...
+    **kw: t.Any,
+) -> None: ...
 
 
 @t.overload
@@ -120,9 +122,8 @@ def common(
     datasample: Buffer,
     objsample: t.Dict[str, t.Any],
     sizesample: t.Union[int, t.Type[Exception]] = ...,
-    **kw: t.Any
-) -> None:
-    ...
+    **kw: t.Any,
+) -> None: ...
 
 
 @t.overload
@@ -131,9 +132,8 @@ def common(
     datasample: Buffer,
     objsample: t.Union[HexDumpDisplayedBytes, bytes],
     sizesample: t.Union[int, t.Type[Exception]] = ...,
-    **kw: t.Any
-) -> None:
-    ...
+    **kw: t.Any,
+) -> None: ...
 
 
 @t.overload
@@ -142,9 +142,8 @@ def common(
     datasample: Buffer,
     objsample: t.Dict[str, t.Any],
     sizesample: t.Union[int, t.Type[Exception]] = ...,
-    **kw: t.Any
-) -> None:
-    ...
+    **kw: t.Any,
+) -> None: ...
 
 
 @t.overload
@@ -153,9 +152,8 @@ def common(
     datasample: Buffer,
     objsample: ParsedType,
     sizesample: t.Union[int, t.Type[Exception]] = ...,
-    **kw: t.Any
-) -> None:
-    ...
+    **kw: t.Any,
+) -> None: ...
 
 
 def common(
@@ -163,7 +161,7 @@ def common(
     datasample: Buffer,
     objsample: t.Any,
     sizesample: t.Union[int, t.Type[Exception]] = SizeofError,
-    **kw: t.Any
+    **kw: t.Any,
 ) -> None:
     obj = format.parse(datasample, **kw)
     assert obj == objsample

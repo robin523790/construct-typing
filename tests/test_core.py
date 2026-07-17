@@ -537,6 +537,12 @@ def test_computed() -> None:
     assert raises(Computed(this.missing).parse, b"") == KeyError
     assert raises(Computed(this["missing"]).parse, b"") == KeyError
 
+def test_computed_lambda() -> None:
+    """Lambdas in a `Computed` are working and check that `ty` dont throw an `invalid-argument-type` error."""
+    c_lambda: "Computed[int]" = Computed(lambda ctx: 50)
+    assert c_lambda.build(None) == b""
+    assert c_lambda.parse(b"") == 50
+
 def test_index() -> None:
     d1 = Array(3, Bytes(this._index+1))
     common(d1, b"abbccc", [b"a", b"bb", b"ccc"])
@@ -561,6 +567,12 @@ def test_rebuild() -> None:
     assert d.build(dict(count=None,items=[255])) == b"\x01\xff"
     assert d.build(dict(count=-1,items=[255])) == b"\x01\xff"
     assert d.build(dict(items=[255])) == b"\x01\xff"
+
+def test_rebuild_lambda() -> None:
+    """Lambdas in a `Rebuild` are working and check that `ty` dont throw an `invalid-argument-type` error."""
+    r_lambda = Rebuild(Bytes(4), lambda ctx: b"TEST")
+    assert r_lambda.build(None) == b"TEST"
+    assert r_lambda.parse(b"TEST") == b"TEST"
 
 def test_rebuild_issue_664() -> None:
     d = Struct(
@@ -612,6 +624,12 @@ def test_default() -> None:
     d = Default(Byte, 0)
     common(d, b"\xff", 255, 1)
     assert d.build(None) == b"\x00"
+
+def test_default_lambda() -> None:
+    """Lambdas in a `Default` are working and check that `ty` dont throw an `invalid-argument-type` error."""
+    d_lambda = Default(Bytes(4), lambda ctx: b"TEST")
+    assert d_lambda.build(None) == b"TEST"
+    assert d_lambda.parse(b"TEST") == b"TEST"
 
 def test_check() -> None:
     common(Check(True), b"", None, 0)

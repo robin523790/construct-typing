@@ -496,7 +496,7 @@ class Sequence(Construct[ListContainer[t.Any], t.Optional[t.List[t.Any]]]):
 # arrays ranges and repeaters
 # ===============================================================================
 class Array(
-    Subconstruct[
+    Subconstruct[  # ty: ignore[invalid-generic-class]
         SubconParsedType,
         SubconBuildTypes,
         ListContainer[SubconParsedType],  # type: ignore
@@ -513,7 +513,7 @@ class Array(
     ) -> None: ...
 
 class GreedyRange(
-    Subconstruct[
+    Subconstruct[  # ty: ignore[invalid-generic-class]
         SubconParsedType,
         SubconBuildTypes,
         ListContainer[SubconParsedType],  # type: ignore
@@ -528,7 +528,7 @@ class GreedyRange(
     ) -> None: ...
 
 class RepeatUntil(
-    Subconstruct[
+    Subconstruct[  # ty: ignore[invalid-generic-class]
         SubconParsedType,
         SubconBuildTypes,
         ListContainer[SubconParsedType],  # type: ignore
@@ -585,19 +585,32 @@ class Const(Subconstruct[t.Any, t.Any, ParsedType, BuildTypes]):
 
 class Computed(Construct[ParsedType, None]):
     func: ConstantOrContextLambda2[ParsedType]
+    @t.overload
     def __init__(
         self,
-        func: ConstantOrContextLambda2[ParsedType],
+        func: t.Callable[[Context], ParsedType],
+    ) -> None: ...
+    @t.overload
+    def __init__(
+        self,
+        func: ParsedType,
     ) -> None: ...
 
 Index: Construct[int, t.Any]
 
 class Rebuild(Subconstruct[SubconParsedType, SubconBuildTypes, SubconParsedType, None]):
-    func: ConstantOrContextLambda[SubconBuildTypes]
+    func: ConstantOrContextLambda2[SubconBuildTypes]
+    @t.overload
     def __init__(
         self,
         subcon: Construct[SubconParsedType, SubconBuildTypes],
-        func: ConstantOrContextLambda[SubconBuildTypes],
+        func: SubconBuildTypes,
+    ) -> None: ...
+    @t.overload
+    def __init__(
+        self,
+        subcon: Construct[SubconParsedType, SubconBuildTypes],
+        func: t.Callable[[Context], SubconBuildTypes],
     ) -> None: ...
 
 class Default(
@@ -608,11 +621,18 @@ class Default(
         t.Optional[SubconBuildTypes],
     ]
 ):
-    value: ConstantOrContextLambda[SubconBuildTypes]
+    value: ConstantOrContextLambda2[SubconBuildTypes]
+    @t.overload
     def __init__(
         self,
         subcon: Construct[SubconParsedType, SubconBuildTypes],
-        value: ConstantOrContextLambda[SubconBuildTypes],
+        value: SubconBuildTypes,
+    ) -> None: ...
+    @t.overload
+    def __init__(
+        self,
+        subcon: Construct[SubconParsedType, SubconBuildTypes],
+        value: t.Callable[[Context], SubconBuildTypes],
     ) -> None: ...
 
 class Check(Construct[None, None]):
@@ -937,7 +957,7 @@ class RawCopyObj(t.Generic[ParsedType], Container[t.Any]):
     length: int
 
 class RawCopy(
-    Subconstruct[
+    Subconstruct[  # ty: ignore[invalid-generic-class]
         SubconParsedType,
         SubconBuildTypes,
         RawCopyObj[SubconParsedType],
@@ -1148,7 +1168,7 @@ class EncryptedSymAead(Tunnel[SubconParsedType, SubconBuildTypes]):
 # lazy equivalents
 # ===============================================================================
 class Lazy(
-    Subconstruct[
+    Subconstruct[  # ty: ignore[invalid-generic-class]
         SubconParsedType,
         SubconBuildTypes,
         t.Callable[[], SubconParsedType],
@@ -1181,7 +1201,7 @@ class LazyStruct(Construct[LazyContainer[t.Any], t.Optional[t.Dict[str, t.Any]]]
 class LazyListContainer(t.List[ListType]): ...
 
 class LazyArray(
-    Subconstruct[
+    Subconstruct[  # ty: ignore[invalid-generic-class]
         SubconParsedType,
         SubconBuildTypes,
         ListContainer[SubconParsedType],  # type: ignore
@@ -1245,7 +1265,7 @@ def Filter(
 ]: ...
 
 class Slicing(
-    Adapter[
+    Adapter[  # ty: ignore[invalid-generic-class]
         SubconParsedType,
         SubconBuildTypes,
         ListContainer[SubconParsedType],  # type: ignore
