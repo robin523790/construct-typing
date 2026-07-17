@@ -150,7 +150,9 @@ class Construct(t.Generic[ParsedType, BuildTypes]):
     ) -> Renamed[ParsedType, BuildTypes]: ...
     def __add__(self, other: Construct[t.Any, t.Any]) -> Struct: ...
     def __rshift__(self, other: Construct[t.Any, t.Any]) -> Sequence: ...
-    def __getitem__(self, count: t.Union[int, t.Callable[[Context], int]]) -> Array[
+    def __getitem__(
+        self, count: t.Union[int, t.Callable[[Context], int]]
+    ) -> Array[
         ParsedType,
         BuildTypes,
     ]: ...
@@ -256,11 +258,15 @@ class Bytes(Construct[bytes, t.Union[bytes, bytearray, int]]):
 
 GreedyBytes: Construct[bytes, t.Union[bytes, bytearray]]
 
-def Bitwise(subcon: Construct[SubconParsedType, SubconBuildTypes]) -> t.Union[
+def Bitwise(
+    subcon: Construct[SubconParsedType, SubconBuildTypes],
+) -> t.Union[
     Transformed[SubconParsedType, SubconBuildTypes],
     Restreamed[SubconParsedType, SubconBuildTypes],
 ]: ...
-def Bytewise(subcon: Construct[SubconParsedType, SubconBuildTypes]) -> t.Union[
+def Bytewise(
+    subcon: Construct[SubconParsedType, SubconBuildTypes],
+) -> t.Union[
     Transformed[SubconParsedType, SubconBuildTypes],
     Restreamed[SubconParsedType, SubconBuildTypes],
 ]: ...
@@ -787,7 +793,7 @@ class Select(Construct[t.Any, t.Any]):
     ) -> None: ...
 
 def Optional(
-    subcon: Construct[SubconParsedType, SubconBuildTypes]
+    subcon: Construct[SubconParsedType, SubconBuildTypes],
 ) -> Construct[t.Union[SubconParsedType, None], t.Union[SubconBuildTypes, None]]: ...
 
 ThenParsedType = t.TypeVar("ThenParsedType")
@@ -970,9 +976,11 @@ class RawCopy(
     ) -> None: ...
 
 def ByteSwapped(
-    subcon: Construct[SubconParsedType, SubconBuildTypes]
+    subcon: Construct[SubconParsedType, SubconBuildTypes],
 ) -> Transformed[SubconParsedType, SubconBuildTypes]: ...
-def BitsSwapped(subcon: Construct[SubconParsedType, SubconBuildTypes]) -> t.Union[
+def BitsSwapped(
+    subcon: Construct[SubconParsedType, SubconBuildTypes],
+) -> t.Union[
     Transformed[SubconParsedType, SubconBuildTypes],
     Restreamed[SubconParsedType, SubconBuildTypes],
 ]: ...

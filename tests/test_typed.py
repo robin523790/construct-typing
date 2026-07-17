@@ -138,8 +138,8 @@ def test_dataclass_struct_nested() -> None:
 
     common(
         DataclassStruct(TestContainer),
-        b"\x02\x01\xF1\xF2",
-        TestContainer(length=2, a=TestContainer.InnerDataclass(b=1, c=b"\xF1\xF2")),
+        b"\x02\x01\xf1\xf2",
+        TestContainer(length=2, a=TestContainer.InnerDataclass(b=1, c=b"\xf1\xf2")),
     )
 
 
@@ -311,7 +311,10 @@ def test_dataclass_struct_wrong_container() -> None:
         a: int = csfield(cs.Int16ub)
         b: int = csfield(cs.Int8ub)
 
-    assert raises(DataclassStruct(TestContainer1).build, TestContainer2(a=1, b=2)) is TypeError
+    assert (
+        raises(DataclassStruct(TestContainer1).build, TestContainer2(a=1, b=2))
+        is TypeError
+    )
 
 
 def test_dataclass_struct_doc() -> None:
@@ -351,7 +354,7 @@ def test_dataclass_bitstruct() -> None:
 
     common(
         DataclassBitStruct(TestContainer),
-        b"\xFD\x12",
+        b"\xfd\x12",
         TestContainer(a=0x7E, b=1, c=0x12),
         2,
     )

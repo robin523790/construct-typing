@@ -139,8 +139,6 @@ error-on-warning = true
 output-format = "concise"  # "full" | "concise" | "github" | "gitlab" | "junit"
 
 [tool.ruff]
-line-length = 140
-indent-width = 4
 output-format = "concise"  # "full" | "concise" | "grouped" | "json" | "junit" | "github" | "gitlab" | "pylint" | "azure"
 
 [tool.ruff.lint]
