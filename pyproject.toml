@@ -135,7 +135,6 @@ exclude = [
 # Valid values: "error", "warn", "ignore"
 [tool.ty.rules]
 invalid-assignment = "ignore"
-invalid-generic-class = "ignore"
 invalid-legacy-type-variable = "ignore"
 invalid-type-arguments = "ignore"
 unused-type-ignore-comment = "ignore"

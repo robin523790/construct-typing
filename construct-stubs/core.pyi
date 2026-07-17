@@ -496,7 +496,7 @@ class Sequence(Construct[ListContainer[t.Any], t.Optional[t.List[t.Any]]]):
 # arrays ranges and repeaters
 # ===============================================================================
 class Array(
-    Subconstruct[
+    Subconstruct[  # ty: ignore[invalid-generic-class]
         SubconParsedType,
         SubconBuildTypes,
         ListContainer[SubconParsedType],  # type: ignore
@@ -513,7 +513,7 @@ class Array(
     ) -> None: ...
 
 class GreedyRange(
-    Subconstruct[
+    Subconstruct[  # ty: ignore[invalid-generic-class]
         SubconParsedType,
         SubconBuildTypes,
         ListContainer[SubconParsedType],  # type: ignore
@@ -528,7 +528,7 @@ class GreedyRange(
     ) -> None: ...
 
 class RepeatUntil(
-    Subconstruct[
+    Subconstruct[  # ty: ignore[invalid-generic-class]
         SubconParsedType,
         SubconBuildTypes,
         ListContainer[SubconParsedType],  # type: ignore
@@ -951,7 +951,7 @@ class RawCopyObj(t.Generic[ParsedType], Container[t.Any]):
     length: int
 
 class RawCopy(
-    Subconstruct[
+    Subconstruct[  # ty: ignore[invalid-generic-class]
         SubconParsedType,
         SubconBuildTypes,
         RawCopyObj[SubconParsedType],
@@ -1162,7 +1162,7 @@ class EncryptedSymAead(Tunnel[SubconParsedType, SubconBuildTypes]):
 # lazy equivalents
 # ===============================================================================
 class Lazy(
-    Subconstruct[
+    Subconstruct[  # ty: ignore[invalid-generic-class]
         SubconParsedType,
         SubconBuildTypes,
         t.Callable[[], SubconParsedType],
@@ -1195,7 +1195,7 @@ class LazyStruct(Construct[LazyContainer[t.Any], t.Optional[t.Dict[str, t.Any]]]
 class LazyListContainer(t.List[ListType]): ...
 
 class LazyArray(
-    Subconstruct[
+    Subconstruct[  # ty: ignore[invalid-generic-class]
         SubconParsedType,
         SubconBuildTypes,
         ListContainer[SubconParsedType],  # type: ignore
@@ -1259,7 +1259,7 @@ def Filter(
 ]: ...
 
 class Slicing(
-    Adapter[
+    Adapter[  # ty: ignore[invalid-generic-class]
         SubconParsedType,
         SubconBuildTypes,
         ListContainer[SubconParsedType],  # type: ignore
