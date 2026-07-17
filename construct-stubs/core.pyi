@@ -593,11 +593,18 @@ class Computed(Construct[ParsedType, None]):
 Index: Construct[int, t.Any]
 
 class Rebuild(Subconstruct[SubconParsedType, SubconBuildTypes, SubconParsedType, None]):
-    func: ConstantOrContextLambda[SubconBuildTypes]
+    func: ConstantOrContextLambda2[SubconBuildTypes]
+    @t.overload
     def __init__(
         self,
         subcon: Construct[SubconParsedType, SubconBuildTypes],
-        func: ConstantOrContextLambda[SubconBuildTypes],
+        func: SubconBuildTypes,
+    ) -> None: ...
+    @t.overload
+    def __init__(
+        self,
+        subcon: Construct[SubconParsedType, SubconBuildTypes],
+        func: t.Callable[[Context], SubconBuildTypes],
     ) -> None: ...
 
 class Default(
@@ -608,11 +615,18 @@ class Default(
         t.Optional[SubconBuildTypes],
     ]
 ):
-    value: ConstantOrContextLambda[SubconBuildTypes]
+    value: ConstantOrContextLambda2[SubconBuildTypes]
+    @t.overload
     def __init__(
         self,
         subcon: Construct[SubconParsedType, SubconBuildTypes],
-        value: ConstantOrContextLambda[SubconBuildTypes],
+        value: SubconBuildTypes,
+    ) -> None: ...
+    @t.overload
+    def __init__(
+        self,
+        subcon: Construct[SubconParsedType, SubconBuildTypes],
+        value: t.Callable[[Context], SubconBuildTypes],
     ) -> None: ...
 
 class Check(Construct[None, None]):

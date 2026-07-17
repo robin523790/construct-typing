@@ -134,7 +134,6 @@ exclude = [
 # These warnings should be activated as "error" in the future, but for now we don't want to refactor the entire codebase right now.
 # Valid values: "error", "warn", "ignore"
 [tool.ty.rules]
-invalid-argument-type = "ignore"
 invalid-assignment = "ignore"
 invalid-generic-class = "ignore"
 invalid-legacy-type-variable = "ignore"

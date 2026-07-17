@@ -562,6 +562,12 @@ def test_rebuild() -> None:
     assert d.build(dict(count=-1,items=[255])) == b"\x01\xff"
     assert d.build(dict(items=[255])) == b"\x01\xff"
 
+def test_rebuild_lambda() -> None:
+    """Lambdas in a `Rebuild` are working and check that `ty` dont throw an `invalid-argument-type` error."""
+    r_lambda = Rebuild(Bytes(4), lambda ctx: b"TEST")
+    assert r_lambda.build(None) == b"TEST"
+    assert r_lambda.parse(b"TEST") == b"TEST"
+
 def test_rebuild_issue_664() -> None:
     d = Struct(
         "bytes" / Bytes(1),
@@ -612,6 +618,12 @@ def test_default() -> None:
     d = Default(Byte, 0)
     common(d, b"\xff", 255, 1)
     assert d.build(None) == b"\x00"
+
+def test_default_lambda() -> None:
+    """Lambdas in a `Default` are working and check that `ty` dont throw an `invalid-argument-type` error."""
+    d_lambda = Default(Bytes(4), lambda ctx: b"TEST")
+    assert d_lambda.build(None) == b"TEST"
+    assert d_lambda.parse(b"TEST") == b"TEST"
 
 def test_check() -> None:
     common(Check(True), b"", None, 0)
