@@ -25,7 +25,7 @@ xfail = pytest.mark.xfail
 skip = pytest.mark.skip
 skipif = pytest.mark.skipif
 
-Buffer = t.Union[bytes, memoryview, bytearray]
+Buffer = bytes | memoryview | bytearray
 ParsedType = t.TypeVar("ParsedType")
 BuildTypes = t.TypeVar("BuildTypes")
 ContainerType = t.TypeVar("ContainerType", bound=cst.TContainerMixin)
@@ -35,7 +35,7 @@ IdentType = t.TypeVar("IdentType")
 
 
 class ZeroIO(io.BufferedIOBase):
-    def read(self, __size: t.Optional[int] = None) -> bytes:
+    def read(self, __size: int | None = None) -> bytes:
         if __size is not None:
             return bytes(__size)
         else:
@@ -54,7 +54,7 @@ devzero: t.BinaryIO = ZeroIO()  # type: ignore
 
 def raises(
     func: t.Callable[..., t.Any], *args: t.Any, **kw: t.Any
-) -> t.Union[t.Any, t.Type[Exception]]:
+) -> t.Any | t.Type[Exception]:
     try:
         return func(*args, **kw)
     except Exception as e:
@@ -65,8 +65,8 @@ def raises(
 def common(
     format: cst.TStruct[ContainerType],
     datasample: Buffer,
-    objsample: t.Union[ContainerType, t.Dict[str, t.Any]],
-    sizesample: t.Union[int, t.Type[Exception]] = ...,
+    objsample: ContainerType | t.Dict[str, t.Any],
+    sizesample: int | t.Type[Exception] = ...,
     **kw: t.Any,
 ) -> None: ...
 
@@ -76,7 +76,7 @@ def common(
     format: "Construct[ListContainer[ParsedType], t.Any]",
     datasample: Buffer,
     objsample: t.List[ParsedType],
-    sizesample: t.Union[int, t.Type[Exception]] = ...,
+    sizesample: int | t.Type[Exception] = ...,
     **kw: t.Any,
 ) -> None: ...
 
@@ -86,17 +86,17 @@ def common(
     format: "Construct[Container[t.Any], t.Any]",
     datasample: Buffer,
     objsample: t.Dict[str, t.Any],
-    sizesample: t.Union[int, t.Type[Exception]] = ...,
+    sizesample: int | t.Type[Exception] = ...,
     **kw: t.Any,
 ) -> None: ...
 
 
 @t.overload
 def common(
-    format: "Construct[t.Union[EnumInteger, EnumIntegerString], t.Any]",
+    format: "Construct[EnumInteger | EnumIntegerString, t.Any]",
     datasample: Buffer,
-    objsample: t.Union[int, str],
-    sizesample: t.Union[int, t.Type[Exception]] = ...,
+    objsample: int | str,
+    sizesample: int | t.Type[Exception] = ...,
     **kw: t.Any,
 ) -> None: ...
 
@@ -105,8 +105,8 @@ def common(
 def common(
     format: "Construct[HexDisplayedInteger, t.Any]",
     datasample: Buffer,
-    objsample: t.Union[HexDisplayedInteger, int],
-    sizesample: t.Union[int, t.Type[Exception]] = ...,
+    objsample: HexDisplayedInteger | int,
+    sizesample: int | t.Type[Exception] = ...,
     **kw: t.Any,
 ) -> None: ...
 
@@ -115,8 +115,8 @@ def common(
 def common(
     format: "Construct[HexDisplayedBytes, t.Any]",
     datasample: Buffer,
-    objsample: t.Union[HexDisplayedBytes, bytes],
-    sizesample: t.Union[int, t.Type[Exception]] = ...,
+    objsample: HexDisplayedBytes | bytes,
+    sizesample: int | t.Type[Exception] = ...,
     **kw: t.Any,
 ) -> None: ...
 
@@ -126,7 +126,7 @@ def common(
     format: "Construct[HexDisplayedDict[str, t.Any], t.Any]",
     datasample: Buffer,
     objsample: t.Dict[str, t.Any],
-    sizesample: t.Union[int, t.Type[Exception]] = ...,
+    sizesample: int | t.Type[Exception] = ...,
     **kw: t.Any,
 ) -> None: ...
 
@@ -135,8 +135,8 @@ def common(
 def common(
     format: "Construct[HexDumpDisplayedBytes, t.Any]",
     datasample: Buffer,
-    objsample: t.Union[HexDumpDisplayedBytes, bytes],
-    sizesample: t.Union[int, t.Type[Exception]] = ...,
+    objsample: HexDumpDisplayedBytes | bytes,
+    sizesample: int | t.Type[Exception] = ...,
     **kw: t.Any,
 ) -> None: ...
 
@@ -146,7 +146,7 @@ def common(
     format: "Construct[HexDumpDisplayedDict[str, t.Any], t.Any]",
     datasample: Buffer,
     objsample: t.Dict[str, t.Any],
-    sizesample: t.Union[int, t.Type[Exception]] = ...,
+    sizesample: int | t.Type[Exception] = ...,
     **kw: t.Any,
 ) -> None: ...
 
@@ -156,7 +156,7 @@ def common(
     format: "Construct[ParsedType, t.Any]",
     datasample: Buffer,
     objsample: ParsedType,
-    sizesample: t.Union[int, t.Type[Exception]] = ...,
+    sizesample: int | t.Type[Exception] = ...,
     **kw: t.Any,
 ) -> None: ...
 
@@ -165,7 +165,7 @@ def common(
     format: "Construct[t.Any, t.Any]",
     datasample: Buffer,
     objsample: t.Any,
-    sizesample: t.Union[int, t.Type[Exception]] = SizeofError,
+    sizesample: int | t.Type[Exception] = SizeofError,
     **kw: t.Any,
 ) -> None:
     obj = format.parse(datasample, **kw)

@@ -20,10 +20,11 @@ T = t.TypeVar("T")
 class DataclassFieldError(Exception):
     """Exception raised by csfield, csfield_noinit, csfield_const and csfield_default."""
 
+
 def _rename_subcon(
     subcon: Construct[T, t.Any],
-    doc: t.Optional[str] = None,
-    parsed: t.Optional[t.Callable[[t.Any, Context], None]] = None,
+    doc: str | None = None,
+    parsed: t.Callable[[t.Any, Context], None] | None = None,
 ) -> Construct[T, t.Any]:
     """Helper method to rename a subcon if doc or parsed are available."""
     if (doc is not None) or (parsed is not None):
@@ -35,8 +36,8 @@ def _rename_subcon(
 
 def csfield(
     subcon: Construct[T, t.Any],
-    doc: t.Optional[str] = None,
-    parsed: t.Optional[t.Callable[[t.Any, Context], None]] = None,
+    doc: str | None = None,
+    parsed: t.Callable[[t.Any, Context], None] | None = None,
     *,
     kw_only: bool = False,
 ) -> T:
@@ -71,8 +72,8 @@ def csfield(
 
 def csfield_noinit(
     subcon: Construct[T, None],
-    doc: t.Optional[str] = None,
-    parsed: t.Optional[t.Callable[[t.Any, Context], None]] = None,
+    doc: str | None = None,
+    parsed: t.Callable[[t.Any, Context], None] | None = None,
     *,
     # "init" should not be used by users. It is only for type checkers to see that this field is excluded from __init__.
     init: t.Literal[False] = False,
@@ -92,7 +93,7 @@ def csfield_noinit(
         raise DataclassFieldError(
             "csfield_noinit() can only be used with constructs that have flagbuildnone=True (Const, Rebuild, Computed, Padding, Tell, Pass, Terminated)."
         )
-    
+
     subcon = _rename_subcon(subcon, doc, parsed)
 
     return t.cast(
@@ -108,8 +109,8 @@ def csfield_noinit(
 def csfield_const(
     subcon: Construct[T, t.Any],
     const: T,
-    doc: t.Optional[str] = None,
-    parsed: t.Optional[t.Callable[[t.Any, Context], None]] = None,
+    doc: str | None = None,
+    parsed: t.Callable[[t.Any, Context], None] | None = None,
     *,
     # "init" should not be used by users. It is only for type checkers to see that this field is excluded from __init__.
     init: t.Literal[False] = False,
@@ -126,7 +127,9 @@ def csfield_const(
             "``cs.Const``, ``cs.Default`` or ``cs.Computed``). Pass the plain, unwrapped subcon instead."
         )
     if callable(const):
-        raise DataclassFieldError("csfield_const() cannot be used with context lambdas.")
+        raise DataclassFieldError(
+            "csfield_const() cannot be used with context lambdas."
+        )
     if isinstance(subcon, cs.Const):
         raise DataclassFieldError(
             "csfield_const() cannot be used with a subcon that is already a ``cs.Const``. Pass the plain, unwrapped subcon instead."
@@ -135,7 +138,7 @@ def csfield_const(
     subcon = cs.Const(const, subcon)
     subcon = _rename_subcon(subcon, doc, parsed)
 
-    return t.cast( 
+    return t.cast(
         T,
         dataclasses.field(
             default=const,
@@ -147,8 +150,8 @@ def csfield_const(
 
 def csfield_default(
     subcon: Construct[T, t.Any],
-    doc: t.Optional[str] = None,
-    parsed: t.Optional[t.Callable[[t.Any, Context], None]] = None,
+    doc: str | None = None,
+    parsed: t.Callable[[t.Any, Context], None] | None = None,
     *,
     default: T,
 ) -> T:
@@ -363,10 +366,7 @@ class DataclassStruct(Adapter[t.Any, t.Any, DataclassType, DataclassType]):
 
 def DataclassBitStruct(
     dc_type: t.Type[DataclassType], reverse: bool = False
-) -> t.Union[
-    "cs.Transformed[DataclassType, DataclassType]",
-    "cs.Restreamed[DataclassType, DataclassType]",
-]:
+) -> "cs.Transformed[DataclassType, DataclassType] | cs.Restreamed[DataclassType, DataclassType]":
     r"""
     Makes a DataclassStruct inside a Bitwise.
 

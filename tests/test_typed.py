@@ -202,8 +202,8 @@ def test_dataclass_str_repr() -> None:
 def test_dataclass_ifthenelse() -> None:
     @dataclasses.dataclass
     class IfThenElseTest(DataclassMixin):
-        test_if: t.Optional[int] = csfield(cs.If(False, cs.Int8ub))
-        test_ifthenelse: t.Optional[int] = csfield(
+        test_if: int | None = csfield(cs.If(False, cs.Int8ub))
+        test_ifthenelse: int | None = csfield(
             cs.IfThenElse(True, cs.Int8ub, cs.Pass)
         )
 

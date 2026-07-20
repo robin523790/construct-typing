@@ -44,5 +44,5 @@ else:
     ):
         pass
 
-    ConstantOrContextLambda = t.Union[ValueType, t.Callable[[Context], t.Any]]
+    ConstantOrContextLambda = ValueType | t.Callable[[Context], t.Any]
     PathType = str

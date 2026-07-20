@@ -43,8 +43,8 @@ def test_dataclass_const_default() -> None:
 def test_dataclass_padded() -> None:
     @dataclasses.dataclass
     class PaddingTest(DataclassMixin):
-        padding: t.Optional[bytes] = csfield_noinit(cs.Padding(1))
-        padded_pass: t.Optional[bytes] = csfield_noinit(cs.Padded(2, cs.Pass))
+        padding: bytes | None = csfield_noinit(cs.Padding(1))
+        padded_pass: bytes | None = csfield_noinit(cs.Padded(2, cs.Pass))
         padded_bytes: bytes = csfield(cs.Padded(7, cs.Bytes(5)))
         padded_string: str = csfield(cs.PaddedString(4, "utf-8"))
 

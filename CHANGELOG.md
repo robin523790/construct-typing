@@ -11,8 +11,11 @@
 - Added `csfield_const` to create dataclass fields that are excluded from constructor and have a constant value.
 - Added `csfield_default` to create dataclass fields that have a default value.
 - Added `csfield_noinit` to create dataclass fields that are excluded from constructor.
+
+**Changes:**
 - Optimize type stubs for `Computed`, `Default` and `Rebuild` in conjunction with `ty`.
 - Optimize type stubs for `Checksum`, to represent that it can build from `None`.
+- Use PEP604 union syntax "X | Y" instead of "Union[X, Y]" and "X | None" instead of "Optional[X]" in type hints.
 
 **Organizational changes:**
 - Use `uv` as a project management tool and `poe` as a task runner.
