@@ -148,7 +148,9 @@ output-format = "concise"  # "full" | "concise" | "grouped" | "json" | "junit" |
 [tool.ruff.lint]
 allowed-confusables = ["×", "–", "‘", "’"]
 select = [
-    "I"
+    "I",
+    "UP007",
+    "UP045"
 ]
 
 [tool.poe.tasks.test]

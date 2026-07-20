@@ -9,7 +9,7 @@ ReturnType = t.TypeVar("ReturnType")
 LhsReturnType = t.TypeVar("LhsReturnType")
 RhsReturnType = t.TypeVar("RhsReturnType")
 
-ConstOrCallable = t.Union[ReturnType, t.Callable[[ReturnType], ReturnType]]
+ConstOrCallable = ReturnType | t.Callable[[ReturnType], ReturnType]
 
 class ExprMixin(t.Generic[ReturnType], object):
     # __add__ ##########################################################################################################
@@ -767,24 +767,24 @@ class ExprMixin(t.Generic[ReturnType], object):
 class UniExpr(ExprMixin[ReturnType]):
     def __init__(self, op: UniOperator, operand: t.Any) -> None: ...
     def __call__(
-        self, obj: t.Union[Context, dict[str, t.Any], t.Any], *args: t.Any
+        self, obj: Context | dict[str, t.Any] | t.Any, *args: t.Any
     ) -> ReturnType: ...
 
 class BinExpr(ExprMixin[ReturnType]):
     def __init__(self, op: BinOperator, lhs: t.Any, rhs: t.Any) -> None: ...
     def __call__(
-        self, obj: t.Union[Context, dict[str, t.Any], t.Any], *args: t.Any
+        self, obj: Context | dict[str, t.Any] | t.Any, *args: t.Any
     ) -> ReturnType: ...
 
 class Path(ExprMixin[ReturnType]):
     def __init__(
         self,
         name: str,
-        field: t.Optional[str] = ...,
-        parent: t.Optional[Path[t.Any]] = ...,
+        field: str | None = ...,
+        parent: Path[t.Any] | None = ...,
     ) -> None: ...
     def __call__(
-        self, obj: t.Union[Context, dict[str, t.Any], t.Any], *args: t.Any
+        self, obj: Context | dict[str, t.Any] | t.Any, *args: t.Any
     ) -> ReturnType: ...
     def __getattr__(self, name: str) -> Path[t.Any]: ...
     def __getitem__(self, name: str) -> Path[t.Any]: ...
@@ -793,15 +793,15 @@ class Path2(ExprMixin[ReturnType]):
     def __init__(
         self,
         name: str,
-        index: t.Optional[int] = ...,
-        parent: t.Optional[Path2[t.Any]] = ...,
+        index: int | None = ...,
+        parent: Path2[t.Any] | None = ...,
     ) -> None: ...
     def __call__(self, *args: t.Any) -> ReturnType: ...
     def __getitem__(self, index: int) -> Path2[t.Any]: ...
 
 class FuncPath(ExprMixin[ReturnType]):
     def __init__(
-        self, func: t.Callable[[t.Any], ReturnType], operand: t.Optional[t.Any] = ...
+        self, func: t.Callable[[t.Any], ReturnType], operand: t.Any | None = ...
     ) -> None: ...
     def __call__(self, operand: t.Any, *args: t.Any) -> ReturnType: ...
 
