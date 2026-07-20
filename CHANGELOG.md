@@ -1,6 +1,6 @@
 # Changelog
 
-## [UNRELEASED]
+## [0.8.0] - 2026-07-20
 **Breaking changes:**
 - `csfield` should only be used for constructs that cannot build from `None`. Every other construct should use the new `csfield_noinit`, `csfield_const` or `csfield_default`.
 - Removed wildcard imports, so it may be necessary to change some import statements in your code when you use non-public APIs.
