@@ -17,6 +17,9 @@ from .generic_wrapper import Adapter, Construct, Context, PathType
 T = t.TypeVar("T")
 
 
+class DataclassFieldError(Exception):
+    """Exception raised by csfield, csfield_noinit, csfield_const and csfield_default."""
+
 def _rename_subcon(
     subcon: Construct[T, t.Any],
     doc: t.Optional[str] = None,
@@ -50,13 +53,12 @@ def csfield(
     `csfield()`) must be marked `kw_only=True`. Otherwise Python's `dataclasses` module raises
     ``TypeError: non-default argument '...' follows default argument`` when the class is defined.
     """
-    orig_subcon = subcon
-    subcon = _rename_subcon(subcon, doc, parsed)
-
-    if orig_subcon.flagbuildnone is True:
-        raise ValueError(
+    if subcon.flagbuildnone is True:
+        raise DataclassFieldError(
             "Fields that can build from None, should be used with ``csfield_noinit()``, ``csfield_default()`` or ``csfield_const()``."
         )
+
+    subcon = _rename_subcon(subcon, doc, parsed)
 
     return t.cast(
         T,
@@ -86,13 +88,12 @@ def csfield_noinit(
     the constant/default value should already be available right after construction, use `csfield_const()` or
     `csfield_default()` instead.
     """
-    orig_subcon = subcon
-    subcon = _rename_subcon(subcon, doc, parsed)
-
-    if orig_subcon.flagbuildnone is False:
-        raise ValueError(
+    if subcon.flagbuildnone is False:
+        raise DataclassFieldError(
             "csfield_noinit() can only be used with constructs that have flagbuildnone=True (Const, Rebuild, Computed, Padding, Tell, Pass, Terminated)."
         )
+    
+    subcon = _rename_subcon(subcon, doc, parsed)
 
     return t.cast(
         T | None,
@@ -120,12 +121,16 @@ def csfield_const(
     The subcon that is passed to this function is automatically wrapped in a `cs.Const` construct.
     """
     if subcon.flagbuildnone is True:
-        raise ValueError(
+        raise DataclassFieldError(
             "csfield_const() cannot be used with a subcon that can already build from None (e.g. another "
             "``cs.Const``, ``cs.Default`` or ``cs.Computed``). Pass the plain, unwrapped subcon instead."
         )
     if callable(const):
-        raise ValueError("csfield_const() cannot be used with context lambdas.")
+        raise DataclassFieldError("csfield_const() cannot be used with context lambdas.")
+    if isinstance(subcon, cs.Const):
+        raise DataclassFieldError(
+            "csfield_const() cannot be used with a subcon that is already a ``cs.Const``. Pass the plain, unwrapped subcon instead."
+        )
 
     subcon = cs.Const(const, subcon)
     subcon = _rename_subcon(subcon, doc, parsed)
@@ -164,13 +169,17 @@ def csfield_default(
     is defined.
     """
     if subcon.flagbuildnone is True:
-        raise ValueError(
+        raise DataclassFieldError(
             "csfield_default() cannot be used with a subcon that can already build from None (e.g. "
             "``cs.Const``, another ``cs.Default`` or ``cs.Computed``). Pass the plain, unwrapped subcon instead."
         )
     if callable(default):
-        raise ValueError(
+        raise DataclassFieldError(
             "csfield_default() cannot be used with context lambdas. Use `csfield_noinit(cs.Default(...))` instead."
+        )
+    if isinstance(subcon, cs.Default):
+        raise DataclassFieldError(
+            "csfield_default() cannot be used with a subcon that is already a ``cs.Default``. Pass the plain, unwrapped subcon instead."
         )
 
     subcon = cs.Default(subcon, default)

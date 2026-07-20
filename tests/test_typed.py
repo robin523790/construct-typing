@@ -17,6 +17,7 @@ from construct_typed import (
     csfield_default,
     csfield_noinit,
 )
+from construct_typed.dataclass_struct import DataclassFieldError
 
 from .declarativeunittest import common, raises, setattrs
 
@@ -71,28 +72,39 @@ def test_dataclass_const_default_noinit() -> None:
 def test_csfield_validation_errors() -> None:
     # `csfield` must reject subcons that can build from None.
     assert (
-        raises(lambda: csfield(cs.Const(b"BMP"))) is ValueError  # type: ignore
+        raises(lambda: csfield(cs.Const(b"BMP"))) is DataclassFieldError  # type: ignore
     )
 
     # `csfield_noinit` must reject subcons that cannot build from None.
-    assert raises(lambda: csfield_noinit(cs.Int8ub)) is ValueError  # type: ignore
+    assert raises(lambda: csfield_noinit(cs.Int8ub)) is DataclassFieldError  # type: ignore
 
     # `csfield_const`/`csfield_default` must reject subcons that already can build
     # from None (e.g. double-wrapping another `Const`/`Default`/`Computed`).
     assert (
-        raises(lambda: csfield_const(cs.Const(b"BMP"), b"BMP")) is ValueError  # type: ignore
+        raises(lambda: csfield_const(cs.Const(b"BMP"), b"BMP")) is DataclassFieldError  # type: ignore
     )
     assert (
-        raises(lambda: csfield_default(cs.Computed(1), default=1)) is ValueError  # type: ignore
+        raises(lambda: csfield_default(cs.Computed(1), default=1))
+        is DataclassFieldError  # type: ignore
     )
 
     # `csfield_const`/`csfield_default` must reject context lambdas.
     assert (
-        raises(lambda: csfield_const(cs.Int8ub, lambda ctx: 1)) is ValueError  # type: ignore
+        raises(lambda: csfield_const(cs.Int8ub, lambda ctx: 1)) is DataclassFieldError  # type: ignore
     )
     assert (
         raises(lambda: csfield_default(cs.Int8ub, default=lambda ctx: 1))  # type: ignore
-        is ValueError
+        is DataclassFieldError
+    )
+
+    # `csfield_const`/`csfield_default` must reject subcons that are already a `Const`/`Default`.
+    assert (
+        raises(lambda: csfield_const(cs.Const(b"BMP"), b"BMP"))  # type: ignore
+        is DataclassFieldError
+    )
+    assert (
+        raises(lambda: csfield_default(cs.Default(cs.Int8ub, 1), default=1))  # type: ignore
+        is DataclassFieldError
     )
 
 
