@@ -12,10 +12,10 @@ from construct_typed import (
     DataclassBitStruct,
     DataclassMixin,
     DataclassStruct,
-    csfield_default,
     csfield,
-    csfield_noinit,
     csfield_const,
+    csfield_default,
+    csfield_noinit,
 )
 
 from .declarativeunittest import common, raises, setattrs

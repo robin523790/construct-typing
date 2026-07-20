@@ -149,6 +149,9 @@ output-format = "concise"  # "full" | "concise" | "grouped" | "json" | "junit" |
 
 [tool.ruff.lint]
 allowed-confusables = ["×", "–", "‘", "’"]
+select = [
+    "I"
+]
 
 [tool.poe.tasks.test]
 cmd = "pytest $POE_EXTRA_ARGS"

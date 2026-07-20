@@ -11,7 +11,13 @@ import typing as t
 
 import construct as cs
 
-from construct_typed import DataclassMixin, csfield_const, csfield_default, csfield, csfield_noinit
+from construct_typed import (
+    DataclassMixin,
+    csfield,
+    csfield_const,
+    csfield_default,
+    csfield_noinit,
+)
 
 
 def test_dataclass_const_default() -> None:
