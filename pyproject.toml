@@ -117,9 +117,7 @@ exclude = [
 reportInvalidTypeForm = "none"
 reportMissingParameterType = "none"
 reportUnknownArgumentType = "none"
-reportUnknownMemberType = "none"
 reportUnknownParameterType = "none"
-reportUnknownVariableType = "none"
 # These "unnecessary isinstance" checks often enhance readability or increase the future-proofness of the code,
 # since you can then explicitly "raise" for other types. So we don't want to complain about them.
 reportUnnecessaryIsInstance = "none"
