@@ -488,14 +488,14 @@ def test_dataclass_struct_wrong_container() -> None:
 def test_dataclass_struct_doc() -> None:
     @dataclasses.dataclass
     class TestContainer(DataclassMixin):
-        a: int = csfield(cs.Int16ub, "This is the documentation of `a`")
+        a: int = csfield(cs.Int16ub, "This is the documentation of a")
         b: int = csfield(
-            cs.Int8ub, doc="This is the documentation of `b`\nwhich is multiline"
+            cs.Int8ub, doc="This is the documentation of b\nwhich is multiline"
         )
         c: int = csfield(
             cs.Int8ub,
             """
-            This is the documentation of `c`
+            This is the documentation of c
             which is also multiline
             """,
         )
@@ -503,13 +503,11 @@ def test_dataclass_struct_doc() -> None:
     format = DataclassStruct(TestContainer)
     common(format, b"\x00\x01\x02\x03", TestContainer(a=1, b=2, c=3), 4)
 
-    assert format.subcon.a.docs == "This is the documentation of `a`"
-    assert (
-        format.subcon.b.docs == "This is the documentation of `b`\nwhich is multiline"
-    )
+    assert format.subcon.a.docs == "This is the documentation of a"
+    assert format.subcon.b.docs == "This is the documentation of b\nwhich is multiline"
     assert (
         format.subcon.c.docs
-        == "This is the documentation of `c`\nwhich is also multiline"
+        == "This is the documentation of c\nwhich is also multiline"
     )
 
 
