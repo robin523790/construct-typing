@@ -52,7 +52,7 @@ operators_uni = [
 ]
 
 
-def create_overload_bin(op, lhs=None, rhs=None):
+def create_overload_bin(op: str, lhs: int | bool | float | None = None, rhs: int | bool | float | None = None):
     if lhs is None and rhs is None:
         print("    @t.overload")
         print(f"    def {op}(self, other: t.Any) -> BinExpr[t.Any]: ...")
@@ -68,7 +68,7 @@ def create_overload_bin(op, lhs=None, rhs=None):
         except AttributeError:
             pass
 
-def create_overload_uni(op, obj=None):
+def create_overload_uni(op: str, obj: int | bool | float | None = None):
     if obj is None:
         print("    @t.overload")
         print(f"    def {op}(self) -> UniExpr[t.Any]: ...")
