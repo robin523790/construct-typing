@@ -112,12 +112,6 @@ exclude = [
     "libs",
 ]
 
-# These warnings should be activated as "error" in the future, but for now we don't want to refactor the entire codebase right now.
-# Valid values: "error", "warning", "information", "none"
-reportInvalidTypeForm = "none"
-reportMissingParameterType = "none"
-reportUnknownArgumentType = "none"
-reportUnknownParameterType = "none"
 # These "unnecessary isinstance" checks often enhance readability or increase the future-proofness of the code,
 # since you can then explicitly "raise" for other types. So we don't want to complain about them.
 reportUnnecessaryIsInstance = "none"
