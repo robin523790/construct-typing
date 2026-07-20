@@ -8,6 +8,9 @@ from .dataclass_struct import (
     TStruct,
     TStructField,
     csfield,
+    csfield_const,
+    csfield_default,
+    csfield_noinit,
     sfield,
 )
 from .generic_wrapper import (
@@ -30,7 +33,10 @@ __all__ = [
     "TContainerMixin",
     "TStruct",
     "TStructField",
+    "csfield_default",
     "csfield",
+    "csfield_noinit",
+    "csfield_const",
     "sfield",
     "EnumBase",
     "EnumValue",

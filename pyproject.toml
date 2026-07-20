@@ -91,6 +91,12 @@ config-settings = { editable_mode = "compat" }
 [tool.mypy]
 strict = true
 warn_unused_ignores = false
+warn_redundant_casts = false
+# This file is specifically designed to test that Pyright emits errors for invalid dataclass calls
+# (via `# pyright: ignore[reportCallIssue]`). Mypy doesn't understand pyright's ignore comments, so
+# it reports these intentionally-invalid calls as real errors. Exclude it from mypy checking.
+exclude = ["tests/test_typed_pyright.py"]
+
 
 [tool.pyright]
 typeCheckingMode = "strict"
@@ -111,9 +117,7 @@ exclude = [
 reportInvalidTypeForm = "none"
 reportMissingParameterType = "none"
 reportUnknownArgumentType = "none"
-reportUnknownMemberType = "none"
 reportUnknownParameterType = "none"
-reportUnknownVariableType = "none"
 # These "unnecessary isinstance" checks often enhance readability or increase the future-proofness of the code,
 # since you can then explicitly "raise" for other types. So we don't want to complain about them.
 reportUnnecessaryIsInstance = "none"
@@ -143,6 +147,9 @@ output-format = "concise"  # "full" | "concise" | "grouped" | "json" | "junit" |
 
 [tool.ruff.lint]
 allowed-confusables = ["×", "–", "‘", "’"]
+select = [
+    "I"
+]
 
 [tool.poe.tasks.test]
 cmd = "pytest $POE_EXTRA_ARGS"
