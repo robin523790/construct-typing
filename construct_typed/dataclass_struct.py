@@ -130,10 +130,13 @@ def csfield_const(
     subcon = cs.Const(const, subcon)
     subcon = _rename_subcon(subcon, doc, parsed)
 
-    return dataclasses.field(
-        default=const,
-        init=False,
-        metadata={"subcon": subcon},
+    return t.cast( 
+        T,
+        dataclasses.field(
+            default=const,
+            init=False,
+            metadata={"subcon": subcon},
+        ),
     )
 
 
@@ -173,10 +176,13 @@ def csfield_default(
     subcon = cs.Default(subcon, default)
     subcon = _rename_subcon(subcon, doc, parsed)
 
-    return dataclasses.field(
-        default=default,
-        init=True,
-        metadata={"subcon": subcon},
+    return t.cast(
+        T,
+        dataclasses.field(
+            default=default,
+            init=True,
+            metadata={"subcon": subcon},
+        ),
     )
 
 
