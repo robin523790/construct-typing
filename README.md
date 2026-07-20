@@ -100,7 +100,7 @@ A short example:
 ```python
 import dataclasses
 import typing as t
-from construct import Array, Byte, Const, Int8ub, this
+from construct import Array, Byte, Bytes, Int8ub, this
 from construct_typed import DataclassMixin, DataclassStruct, EnumBase, TEnum, csfield, csfield_const
 
 class Orientation(EnumBase):
@@ -130,10 +130,10 @@ Output:
 b'BMP\x01\x03\x02\x07\x08\t\x0b\x0c\r'
 Image: 
     signature = b'BMP' (total 3)
-    orientation = Orientation.VERTICAL
+    orientation = 1
     width = 3
     height = 2
-    pixels = ListContainer:
+    pixels = ListContainer: 
         7
         8
         9
@@ -147,7 +147,7 @@ If you want a simple, fixed constant in a `DataclassStruct`, use `csfield_const`
 
 ```python
 import dataclasses
-from construct import Const, Int8ub, Bytes
+from construct import Int8ub, Bytes
 from construct_typed import DataclassMixin, csfield, csfield_const
 import inspect
 
