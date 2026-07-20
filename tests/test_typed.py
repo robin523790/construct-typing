@@ -38,7 +38,7 @@ def test_dataclass_const_default_noinit() -> None:
         # Construct allows to put non-default values after Default. Dataclass and Pyright don't like that too much. It is necessary to
         # specify the field `kw_only` and pass it "by keyword".
         normal_int: int = csfield(cs.Int8ub, kw_only=True)
-        const_int2: int | None = csfield_const(cs.Int8ub, 5)
+        const_int2: int = csfield_const(cs.Int8ub, 5)
 
     format = DataclassStruct(ConstDefaultTest)
 
